@@ -6,11 +6,13 @@ Swift implementation of [JSON Web Token](https://tools.ietf.org/html/draft-ietf-
 
 ## Installation
 
-[CocoaPods](http://cocoapods.org/) is the recommended installation method.
+Swift Pacakage Manager is the recommended installation method for JSONWebToken, [CocoaPods](http://cocoapods.org/) is also supported.
 
 ```ruby
 pod 'JSONWebToken'
 ```
+
+**NOTE:** *Carthage may be supported, however support will not be provided for this installation method, use at your own risk if you know how it works.*
 
 ## Usage
 
@@ -32,7 +34,7 @@ claims.issuer = "fuller.li"
 claims.issuedAt = Date()
 claims["custom"] = "Hi"
 
-JWT.encode(claims: claims, algorithm, algorithm: .hs256("secret".data(using: .utf8)))
+JWT.encode(claims: claims, algorithm: .hs256("secret".data(using: .utf8)!))
 ```
 
 #### Building a JWT with the builder pattern
@@ -66,6 +68,12 @@ try JWT.decode("eyJh...5w", algorithms: [
   .hs256("secret2".data(using: .utf8)!),
   .hs512("secure".data(using: .utf8)!)
 ])
+```
+
+You might also want to give your iat, exp and nbf checks some kind of leeway to account for skewed clocks. You can do this by passing a `leeway` parameter like this:
+
+```swift
+try JWT.decode("eyJh...5w", algorithm: .hs256("secret".data(using: .utf8)!), leeway: 10)
 ```
 
 #### Supported claims
